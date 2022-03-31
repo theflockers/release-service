@@ -44,15 +44,9 @@ spec:
               strategy:
                 pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?$
                 type: string
-              trigger:
-                enum:
-                - automated
-                - manual
-                type: string
             required:
             - component
             - strategy
-            - trigger
             type: object
           status:
             description: ReleaseStatus defines the observed state of Release
@@ -143,9 +137,15 @@ spec:
               strategyOverridden:
                 description: Whether the strategy was overridden or not
                 type: boolean
+              trigger:
+                enum:
+                - automated
+                - manual
+                type: string
             required:
             - conditions
             - strategyOverridden
+            - trigger
             type: object
         type: object
     served: true

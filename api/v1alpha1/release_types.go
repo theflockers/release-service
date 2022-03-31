@@ -28,10 +28,6 @@ type ReleaseSpec struct {
 	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 
-	//+kubebuilder:validation:Enum=automated;manual
-	// +required
-	Trigger string `json:"trigger"`
-
 	// +kubebuilder:validation:Pattern=^[a-z0-9]([-a-z0-9]*[a-z0-9])?$
 	// +optional
 	Application string `json:"application,omitempty"`
@@ -47,6 +43,10 @@ type ReleaseSpec struct {
 
 // ReleaseStatus defines the observed state of Release
 type ReleaseStatus struct {
+	//+kubebuilder:validation:Enum=automated;manual
+	// +required
+	Trigger string `json:"trigger"`
+
 	// StartTime is the time the release is actually started
 	// +optional
 	StartTime *metav1.Time `json:"startTime,omitempty"`
@@ -56,6 +56,7 @@ type ReleaseStatus struct {
 	CompletionTime *metav1.Time `json:"completionTime,omitempty"`
 
 	// Conditions represent the latest available observations for the release
+	// +required
 	Conditions []metav1.Condition `json:"conditions"`
 
 	// Reference to the Release PipelineRun executed as part of this release
@@ -64,6 +65,7 @@ type ReleaseStatus struct {
 	PipelineRunRef string `json:"pipelineRun,omitempty"`
 
 	// Whether the strategy was overridden or not
+	// +required
 	StrategyOverridden bool `json:"strategyOverridden"`
 }
 

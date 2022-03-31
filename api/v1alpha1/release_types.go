@@ -28,14 +28,43 @@ type ReleaseSpec struct {
 	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 
-	// Foo is an example field of Release. Edit release_types.go to remove/update
-	Foo string `json:"foo,omitempty"`
+	//+kubebuilder:validation:Enum=automated;manual
+	// +required
+	Trigger string `json:"trigger"`
+
+	// +kubebuilder:validation:Pattern=^[a-z0-9]([-a-z0-9]*[a-z0-9])?$
+	// +optional
+	Application string `json:"application,omitempty"`
+
+	// +kubebuilder:validation:Pattern=^[a-z0-9]([-a-z0-9]*[a-z0-9])?$
+	// +required
+	Component string `json:"component"`
+
+	// +kubebuilder:validation:Pattern=^[a-z0-9]([-a-z0-9]*[a-z0-9])?$
+	// +required
+	Strategy string `json:"strategy"`
 }
 
 // ReleaseStatus defines the observed state of Release
 type ReleaseStatus struct {
-	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
+	// StartTime is the time the release is actually started
+	// +optional
+	StartTime *metav1.Time `json:"startTime,omitempty"`
+
+	// CompletionTime is the time the release completed
+	// +optional
+	CompletionTime *metav1.Time `json:"completionTime,omitempty"`
+
+	// Conditions represent the latest available observations for the release
+	Conditions []metav1.Condition `json:"conditions"`
+
+	// Reference to the Release PipelineRun executed as part of this release
+	// +kubebuilder:validation:Pattern=^[a-z0-9]([-a-z0-9]*[a-z0-9])?$
+	// +optional
+	PipelineRunRef string `json:"pipelineRun,omitempty"`
+
+	// Whether the strategy was overridden or not
+	StrategyOverridden bool `json:"strategyOverridden"`
 }
 
 //+kubebuilder:object:root=true

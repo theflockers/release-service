@@ -25,13 +25,6 @@ import (
 
 // ReleaseSpec defines the desired state of Release
 type ReleaseSpec struct {
-	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
-
-	// +kubebuilder:validation:Pattern=^[a-z0-9]([-a-z0-9]*[a-z0-9])?$
-	// +optional
-	Application string `json:"application,omitempty"`
-
 	// +kubebuilder:validation:Pattern=^[a-z0-9]([-a-z0-9]*[a-z0-9])?$
 	// +required
 	Component string `json:"component"`

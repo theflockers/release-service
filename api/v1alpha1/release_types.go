@@ -36,7 +36,7 @@ type ReleaseSpec struct {
 
 // ReleaseStatus defines the observed state of Release
 type ReleaseStatus struct {
-	//+kubebuilder:validation:Enum=automated;manual
+	// +kubebuilder:validation:Enum=automated;manual
 	// +required
 	Trigger string `json:"trigger"`
 
@@ -49,7 +49,7 @@ type ReleaseStatus struct {
 	CompletionTime *metav1.Time `json:"completionTime,omitempty"`
 
 	// Conditions represent the latest available observations for the release
-	// +required
+	// +optional
 	Conditions []metav1.Condition `json:"conditions"`
 
 	// Reference to the Release PipelineRun executed as part of this release
@@ -70,7 +70,9 @@ type Release struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec   ReleaseSpec   `json:"spec,omitempty"`
+	Spec ReleaseSpec `json:"spec,omitempty"`
+
+	// +kubebuilder:default={trigger: manual, strategyOverridden: false}
 	Status ReleaseStatus `json:"status,omitempty"`
 }
 

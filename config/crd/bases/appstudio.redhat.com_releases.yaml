@@ -35,9 +35,6 @@ spec:
           spec:
             description: ReleaseSpec defines the desired state of Release
             properties:
-              application:
-                pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?$
-                type: string
               component:
                 pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?$
                 type: string
@@ -49,6 +46,9 @@ spec:
             - strategy
             type: object
           status:
+            default:
+              strategyOverridden: false
+              trigger: manual
             description: ReleaseStatus defines the observed state of Release
             properties:
               completionTime:
@@ -143,7 +143,6 @@ spec:
                 - manual
                 type: string
             required:
-            - conditions
             - strategyOverridden
             - trigger
             type: object

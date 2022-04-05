@@ -18,7 +18,9 @@ package controllers
 
 import (
 	"context"
-
+	"github.com/redhat-appstudio/release-service/api/v1alpha1"
+	tektonv1beta1 "github.com/tektoncd/pipeline/pkg/apis/pipeline/v1beta1"
+	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
@@ -45,9 +47,36 @@ type PipelineRunReconciler struct {
 // For more details, check Reconcile and its Result here:
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.11.0/pkg/reconcile
 func (r *PipelineRunReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
-	_ = log.FromContext(ctx)
+	l := log.FromContext(ctx)
 
-	// TODO(user): your logic here
+	release := &v1alpha1.Release{
+		ObjectMeta: v1.ObjectMeta{
+			Name:      "test",
+			Namespace: "default",
+		},
+		Spec: v1alpha1.ReleaseSpec{
+			Component: "my-component",
+			Strategy:  "my-strategy",
+		},
+	}
+
+	err := r.Create(ctx, release)
+	if err != nil {
+		l.Error(err, "Failed to create Release")
+
+		return ctrl.Result{}, err
+	}
+
+	status := v1alpha1.ReleaseStatus{
+		Trigger:            "automated",
+		StrategyOverridden: false,
+	}
+
+	release.Status = status
+	err = r.Status().Update(ctx, release)
+	if err != nil {
+		l.Error(err, err.Error())
+	}
 
 	return ctrl.Result{}, nil
 }
@@ -56,6 +85,6 @@ func (r *PipelineRunReconciler) Reconcile(ctx context.Context, req ctrl.Request)
 func (r *PipelineRunReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
 		// Uncomment the following line adding a pointer to an instance of the controlled resource as an argument
-		// For().
+		For(&tektonv1beta1.PipelineRun{}).
 		Complete(r)
 }

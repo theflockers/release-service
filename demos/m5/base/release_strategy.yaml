@@ -4,5 +4,12 @@ metadata:
   name: m5-strategy
   namespace: managed
 spec:
-  pipeline: release-pipeline
-  bundle: quay.io/hacbs-release/demo:m5-alpine
+  pipeline: m5-release-pipeline
+  bundle: quay.io/hacbs-release/m5-release-pipeline:main
+  policy: m5-policy
+  params:
+    - name: extraConfigGitUrl
+      value: https://github.com/davidmogar/strategy-configs.git
+    - name: extraConfigPath
+      value: m5.yaml
+  serviceAccount: m5-service-account

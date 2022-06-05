@@ -5,7 +5,7 @@ metadata:
   namespace: demo
 spec:
   displayName: Users's ReleaseLink
-  application: m5-app
+  application: m5-application
   target: managed
 ---
 apiVersion: appstudio.redhat.com/v1alpha1
@@ -15,6 +15,6 @@ metadata:
   namespace: managed
 spec:
   displayName: Managed Workspace's ReleaseLink
-  application: m5-app
+  application: m5-application
   target: demo
   releaseStrategy: m5-strategy

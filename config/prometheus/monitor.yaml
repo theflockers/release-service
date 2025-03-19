@@ -16,7 +16,7 @@ metadata:
 spec:
   endpoints:
     - path: /metrics
-      port: http
+      port: metrics
       scheme: http
       bearerTokenSecret:
         key: token
